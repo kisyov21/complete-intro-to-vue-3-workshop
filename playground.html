@@ -9,15 +9,27 @@
   <body>
     <h1>Hello</h1>
     <div id="app">
-      <p v-if="message.length %2 === 0">Even:  {{ message }}</p>
-      <p v-else>Odd:  {{ message }}</p>
+      <h1>{{displayTitle}}</h1>
+      <p :data-increment-by="incrementAmount">{{ count }}</p>
+      <button @click="incrementCount">Increment Count</button>
+      <h1>{{ incrementAmount }}</h1>
+      <p>{{ optimizedIncrementAmount }}</p>
+      <div>
+        <label for="incrementAmount">Increment by:</label>
+        <input type="number" v-model="incrementAmount" />
+      </div>
+      <hr />
+      <p v-if="message.length %2 === 0">Even: {{ message }}</p>
+      <p v-else>Odd: {{ message }}</p>
       <ul>
-        <li v-for="item in listOfNumber" :key="item.id">{{ item.id }}
+        <li v-for="item in listOfNumber" :key="item.id">
+          {{ item.id }}
           <ul>
             <li v-for="number in item.list" :key="number">{{ number }}</li>
           </ul>
         </li>
       </ul>
+    </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
       const { createApp } = Vue;
@@ -25,8 +37,39 @@
         data() {
           return {
             message: "Hello World!",
-            listOfNumber: [{ name: 0, id: "d126a6ec-5ded-4efc-a010-85fd5b3f5938", list: [1,2,3]},{ name: 1, id: "4d2116c5-43af-46a7-a42b-d46cbd04854d", list: [1,2,3]},{ name: 2, id: "1c81c7e5-5387-4471-a94a-ba5b7e97ada7", list: [1,2,3]},{ name: 3, id: "759412e7-1236-4d54-892b-b203428982ec", list: [1,2,3]},{ name: 4, id: "3b7792de-c9c8-460a-8070-ca3ab601e6c1", list: [1,2,3]}]
+            counterTitle: "Counter Standard",
+            count: 0,
+            incrementAmount: 1,
+            listOfNumber: [
+              { name: 0, id: "d126a6ec-5ded-4efc-a010-85fd5b3f5938", list: [1, 2, 3] },
+              { name: 1, id: "4d2116c5-43af-46a7-a42b-d46cbd04854d", list: [1, 2, 3] },
+              { name: 2, id: "1c81c7e5-5387-4471-a94a-ba5b7e97ada7", list: [1, 2, 3] },
+              { name: 3, id: "759412e7-1236-4d54-892b-b203428982ec", list: [1, 2, 3] },
+              { name: 4, id: "3b7792de-c9c8-460a-8070-ca3ab601e6c1", list: [1, 2, 3] },
+            ],
           };
+        },
+        computed: {
+          displayTitle() {
+            if (this.count > 20) {
+              return "Counter High";
+            } else {
+              return "Counter Low";
+            }
+          },
+          optimizedIncrementAmount() {
+            return this.displayTitle.length * this.incrementAmount;
+          },
+        },
+        methods: {
+          incrementCount() {
+            this.count += this.incrementAmount;
+          },
+        },
+        watch: {
+          count(newValue, oldValue) {
+            console.log(newValue, oldValue);
+          },
         },
       });
 
